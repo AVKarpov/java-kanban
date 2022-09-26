@@ -1,9 +1,15 @@
+package manager;
+
+import tasks.Epic;
+import tasks.SubTask;
+import tasks.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TasksManager implements ITasksManager{
+public class TasksManager implements ITasksManager {
 
     private HashMap<Integer,Task> tasks = new HashMap<>();
     private HashMap<Integer,SubTask> subTasks = new HashMap<>();
@@ -61,7 +67,7 @@ public class TasksManager implements ITasksManager{
     public int addNewSubTask(SubTask subTask) {
         Epic epic = getEpic(subTask.getEpicId());
         if (epic == null) {
-            System.out.println("Can not add " + subTask.getName() + ": no find Epic" + subTask.getEpicId());
+            System.out.println("Can not add " + subTask.getName() + ": no find tasks.Epic" + subTask.getEpicId());
             return -1;
         } else {
             final int id = ++generatorId;
