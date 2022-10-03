@@ -1,19 +1,21 @@
 package manager;
 
 import tasks.Epic;
+import tasks.TaskStatus;
 import tasks.SubTask;
 import tasks.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-public class TasksManager implements ITasksManager {
+import static tasks.TaskStatus.*;
+
+public class InMemoryTaskManager implements TaskManager {
 
     private HashMap<Integer,Task> tasks = new HashMap<>();
     private HashMap<Integer,SubTask> subTasks = new HashMap<>();
     private HashMap<Integer,Epic> epics = new HashMap<>();
+
+    private HistoryManager historyManager = Managers.getDefaultHistory();
 
     private int generatorId = 0;
 
@@ -42,17 +44,23 @@ public class TasksManager implements ITasksManager {
 
     @Override
     public Task getTask(int id) {
-        return tasks.get(id);
+        Task task = tasks.get(id);
+        historyManager.addTask(task);
+        return task;
     }
 
     @Override
     public SubTask getSubTask(int id) {
-        return subTasks.get(id);
+        SubTask subTask = subTasks.get(id);
+        historyManager.addTask(subTask);
+        return subTask;
     }
 
     @Override
     public Epic getEpic(int id) {
-        return epics.get(id);
+        Epic epic = epics.get(id);
+        historyManager.addTask(epic);
+        return epic;
     }
 
     @Override
@@ -80,22 +88,22 @@ public class TasksManager implements ITasksManager {
     }
 
     private void updateEpicStatus(Epic epic) {
-        Set<String> subTasksStatus = new HashSet<>();
+        Set<TaskStatus> subTasksTaskStatuses = new HashSet<>();
         for (Integer i : epic.getSubTaskIds())
-            subTasksStatus.add(subTasks.get(i).getStatus());
+            subTasksTaskStatuses.add(subTasks.get(i).getStatus());
 
         //если у эпика нет подзадач или все они имеют статус NEW, то статус должен быть NEW
-        if ((epic.getSubTaskIds().size() == 0) || (subTasksStatus.contains("NEW") && subTasksStatus.size() == 1)) {
-            epic.setStatus("NEW");
+        if ((epic.getSubTaskIds().size() == 0) || (subTasksTaskStatuses.contains(NEW) && subTasksTaskStatuses.size() == 1)) {
+            epic.setStatus(NEW);
             return;
         }
         //если все подзадачи имеют статус DONE, то и эпик считается завершённым — со статусом DONE
-        if (subTasksStatus.contains("DONE") && subTasksStatus.size() == 1) {
-            epic.setStatus("DONE");
+        if (subTasksTaskStatuses.contains(DONE) && subTasksTaskStatuses.size() == 1) {
+            epic.setStatus(DONE);
             return;
         }
         //во всех остальных случаях статус должен быть IN_PROGRESS
-        epic.setStatus("IN_PROGRESS");
+        epic.setStatus(IN_PROGRESS);
     }
 
     @Override
@@ -160,4 +168,10 @@ public class TasksManager implements ITasksManager {
             epics.remove(id);
         }
     }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
 }

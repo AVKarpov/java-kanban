@@ -5,8 +5,9 @@ import tasks.SubTask;
 import tasks.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public interface ITasksManager {
+public interface TaskManager {
     //Получение списка всех задач, подзадач, эпиков
     ArrayList<Task> getAllTasks();
     ArrayList<SubTask> getAllSubTasks();
@@ -34,4 +35,6 @@ public interface ITasksManager {
     void deleteTask(int id);
     void deleteSubTask(int id);
     void deleteEpic(int id);
+
+    List<Task> getHistory();
 }

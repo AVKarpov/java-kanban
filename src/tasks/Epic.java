@@ -6,8 +6,8 @@ public class Epic extends Task {
 
     protected ArrayList<Integer> subTaskIds = new ArrayList<>();
 
-    public Epic(String name, String description, String status) {
-        super(name, description, status);
+    public Epic(String name, String description, TaskStatus taskStatus) {
+        super(name, description, taskStatus);
     }
 
     public void addSubTaskId(int id) {
@@ -20,12 +20,12 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return "tasks.Epic{" +
+        return "Epic{" +
                 "subTaskIds=" + subTaskIds +
                 ", epicId=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}' + "\n";
+                ", status='" + taskStatus + '\'' +
+                '}';
     }
 }
