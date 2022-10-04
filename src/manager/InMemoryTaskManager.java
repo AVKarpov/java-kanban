@@ -11,11 +11,10 @@ import static tasks.TaskStatus.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private HashMap<Integer,Task> tasks = new HashMap<>();
-    private HashMap<Integer,SubTask> subTasks = new HashMap<>();
-    private HashMap<Integer,Epic> epics = new HashMap<>();
-
-    private HistoryManager historyManager = Managers.getDefaultHistory();
+    private final HashMap<Integer,Task> tasks = new HashMap<>();
+    private final HashMap<Integer,SubTask> subTasks = new HashMap<>();
+    private final HashMap<Integer,Epic> epics = new HashMap<>();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
 
     private int generatorId = 0;
 

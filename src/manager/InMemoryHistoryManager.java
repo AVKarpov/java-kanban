@@ -2,14 +2,14 @@ package manager;
 
 import tasks.Task;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
     private static final int HISTORY_SIZE = 10;
 
-    List<Task> historyTasks = new ArrayList<>();
+    private final List<Task> historyTasks = new LinkedList<>();
 
     @Override
     public List<Task> getHistory() {
