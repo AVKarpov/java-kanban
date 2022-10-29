@@ -44,21 +44,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTask(int id) {
         Task task = tasks.get(id);
-        historyManager.addTask(task);
+        historyManager.add(task);
         return task;
     }
 
     @Override
     public SubTask getSubTask(int id) {
         SubTask subTask = subTasks.get(id);
-        historyManager.addTask(subTask);
+        historyManager.add(subTask);
         return subTask;
     }
 
     @Override
     public Epic getEpic(int id) {
         Epic epic = epics.get(id);
-        historyManager.addTask(epic);
+        historyManager.add(epic);
         return epic;
     }
 
@@ -136,12 +136,15 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteAllTasks() {
+        for (Integer id : tasks.keySet())
+            historyManager.remove(id);
         tasks.clear();
     }
 
     @Override
     public void deleteTask(int id) {
         tasks.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
@@ -151,6 +154,7 @@ public class InMemoryTaskManager implements TaskManager {
             int epicId = subTasks.get(id).getEpicId();
             //удаляем сабтаску
             subTasks.remove(id);
+            historyManager.remove(id);
             //обновляем статус эпика
             updateEpicStatus(epics.get(epicId));
         }
@@ -160,11 +164,14 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpic(int id) {
         //проверяем, что такой эпик существует
         if (epics.containsKey(id)) {
-            //удаляем все сабтаски эписка, если имеются
+            //удаляем все сабтаски эпика, если имеются
             if (epics.get(id).getSubTaskIds().size() > 0)
-                for (Integer i : epics.get(id).getSubTaskIds())
+                for (Integer i : epics.get(id).getSubTaskIds()) {
                     subTasks.remove(i);
+                    historyManager.remove(i);
+                }
             epics.remove(id);
+            historyManager.remove(id);
         }
     }
 
