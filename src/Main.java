@@ -1,7 +1,9 @@
+import manager.FileBackedTasksManager;
 import manager.Managers;
 import manager.TaskManager;
 import tasks.*;
 
+import java.io.File;
 import java.util.List;
 
 import static tasks.TaskStatus.*;
@@ -15,6 +17,7 @@ public class Main {
         //Создайте 2 задачи
         Task task1 = new Task("Task #1","Task #1 description", NEW);
         int task1Id = manager.addNewTask(task1);
+
         Task task2 = new Task("Task #2","Task #2 description", IN_PROGRESS);
         int task2Id = manager.addNewTask(task2);
 
@@ -40,24 +43,12 @@ public class Main {
         manager.getEpic(epic1Id);
         manager.getEpic(epic2Id);
         manager.getTask(task2Id);
+        printAll(manager);
         printHistory(manager);
 
-        manager.getEpic(epic1Id);
-        manager.getEpic(epic2Id);
-        manager.getTask(task2Id);
-        manager.getTask(task1Id);
-        manager.getSubTask(subTask1Id);
-        manager.getSubTask(subTask2Id);
-        manager.getSubTask(subTask3Id);
-        manager.getTask(task1Id);
-        manager.getTask(task2Id);
-        printHistory(manager);
-
-        manager.deleteTask(task1Id);
-        printHistory(manager);
-
-        manager.deleteEpic(epic1Id);
-        printHistory(manager);
+        FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(new File("resources/task.csv"));
+        printAll(fileBackedTasksManager2);
+        printHistory(fileBackedTasksManager2);
     }
 
     static void printHistory(TaskManager manager) {
