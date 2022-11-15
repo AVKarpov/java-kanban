@@ -45,11 +45,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             writer.write(CSVTaskFormat.historyToString(super.historyManager));
 
         } catch (IOException e) {
-            try {
-                throw new ManagerSaveException(e);
-            } catch (ManagerSaveException ex) {
-                throw new RuntimeException(ex);
-            }
+            throw new ManagerSaveException("FileBackedTasksManager: Возникло исключение при сохранении в файл");
         }
     }
 
@@ -80,7 +76,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     taskManager.restoreHistory(historyIds);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveException("FileBackedTasksManager: Возникло исключение при загрузке из файла");
         }
 
         return taskManager;
