@@ -15,7 +15,7 @@ public class Main {
         TaskManager manager = Managers.getDefault();
 
         //Создайте 2 задачи
-        Task task1 = new Task("Task #1","Task #1 description", NEW);
+        /*Task task1 = new Task("Task #1","Task #1 description", NEW);
         int task1Id = manager.addNewTask(task1);
 
         Task task2 = new Task("Task #2","Task #2 description", IN_PROGRESS);
@@ -49,6 +49,7 @@ public class Main {
         FileBackedTasksManager fileBackedTasksManager2 = FileBackedTasksManager.loadFromFile(new File("resources/task.csv"));
         printAll(fileBackedTasksManager2);
         printHistory(fileBackedTasksManager2);
+        */
     }
 
     static void printHistory(TaskManager manager) {

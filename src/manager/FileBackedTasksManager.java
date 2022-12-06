@@ -26,23 +26,30 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            writer.write("id,type,name,status,description,epic\n");
+            writer.write("id,type,name,status,description,startTime,duration,endTime,epic\n");
 
             ArrayList<Task> tasks = super.getAllTasks();
-            for (Task task : tasks) {
-                writer.write(CSVTaskFormat.toString(task) + "\n");
-            }
+            if (tasks.size() > 0)
+                for (Task task : tasks) {
+                    writer.write(CSVTaskFormat.toString(task) + "\n");
+                }
+
             ArrayList<SubTask> subTasks = super.getAllSubTasks();
-            for (SubTask subTask : subTasks) {
-                writer.write(CSVTaskFormat.toString(subTask)  + "\n");
-            }
+            if (subTasks.size() > 0)
+                for (SubTask subTask : subTasks) {
+                    writer.write(CSVTaskFormat.toString(subTask)  + "\n");
+                }
+
             ArrayList<Epic> epics = super.getAllEpics();
-            for (Epic epic : epics) {
-                writer.write(CSVTaskFormat.toString(epic)  + "\n");
-            }
+            if (epics.size() > 0)
+                for (Epic epic : epics) {
+                    writer.write(CSVTaskFormat.toString(epic)  + "\n");
+                }
             writer.write("\n");
 
-            writer.write(CSVTaskFormat.historyToString(super.historyManager));
+            String result = CSVTaskFormat.historyToString(super.historyManager);
+            if (result != null)
+               writer.write(result);
 
         } catch (IOException e) {
             throw new ManagerSaveException("FileBackedTasksManager: Возникло исключение при сохранении в файл");
@@ -58,22 +65,28 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 String[] lines = content.split("\r?\n");
                 int generatorId = 0;
                 int i = 1;
-                while (!lines[i].equals("")) {
-                    Task task = CSVTaskFormat.fromString(lines[i]);
-                    if (task != null) {
-                        if (task.getId() > generatorId)
-                            generatorId = task.getId();
-                        taskManager.restoreTaskInMemory(task);
-                    }
-                    i++;
-                }
-                taskManager.updateEpicsSubTaskIds();
-                taskManager.setGeneratorId(generatorId);
 
+                if (i < lines.length) {
+                    while (!lines[i].equals("")) {
+                        Task task = CSVTaskFormat.fromString(lines[i]);
+                        if (task != null) {
+                            if (task.getId() > generatorId)
+                                generatorId = task.getId();
+                            taskManager.restoreTaskInMemory(task);
+                        }
+                        i++;
+                        if (i == lines.length)
+                            break;
+                    }
+                    taskManager.updateEpicsSubTaskIds();
+                    taskManager.setGeneratorId(generatorId);
+                }
                 //restore History
-                List<Integer> historyIds = CSVTaskFormat.historyFromString(lines[i + 1]);
-                if (historyIds != null)
-                    taskManager.restoreHistory(historyIds);
+                if (i < lines.length) {
+                    List<Integer> historyIds = CSVTaskFormat.historyFromString(lines[i + 1]);
+                    if (historyIds != null)
+                        taskManager.restoreHistory(historyIds);
+                }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("FileBackedTasksManager: Возникло исключение при загрузке из файла");

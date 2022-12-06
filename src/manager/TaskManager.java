@@ -6,6 +6,7 @@ import tasks.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
     //Получение списка всех задач, подзадач, эпиков
@@ -18,6 +19,8 @@ public interface TaskManager {
     SubTask getSubTask(int id);
     Epic getEpic(int id);
     ArrayList<SubTask> getEpicSubTasks(int epicId);
+
+    Set<Task> getPrioritizedTasks();
 
     //Создание. Сам объект должен передаваться в качестве параметра
     int addNewTask(Task task);
