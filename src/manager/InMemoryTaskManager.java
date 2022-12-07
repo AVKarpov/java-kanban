@@ -150,17 +150,14 @@ public class InMemoryTaskManager implements TaskManager {
         for (Integer i : epic.getSubTaskIds())
             subTasksTaskStatuses.add(subTasks.get(i).getStatus());
 
-        //если у эпика нет подзадач или все они имеют статус NEW, то статус должен быть NEW
         if ((epic.getSubTaskIds().size() == 0) || (subTasksTaskStatuses.contains(NEW) && subTasksTaskStatuses.size() == 1)) {
             epic.setStatus(NEW);
             return;
         }
-        //если все подзадачи имеют статус DONE, то и эпик считается завершённым — со статусом DONE
         if (subTasksTaskStatuses.contains(DONE) && subTasksTaskStatuses.size() == 1) {
             epic.setStatus(DONE);
             return;
         }
-        //во всех остальных случаях статус должен быть IN_PROGRESS
         epic.setStatus(IN_PROGRESS);
     }
 
@@ -182,14 +179,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubTask(SubTask subTask) {
         if (subTask != null)
-            //проверяем, что у нас есть такая сабтаска
             if (subTasks.get(subTask.getId()) != null) {
                 if (!isIntersect(subTask)) {
-                    //обновляем сабтаску
                     subTasks.put(subTask.getId(), subTask);
-                    //обновляем статус эпика
                     updateEpicStatus(epics.get(subTask.getEpicId()));
-                    //обновляем время эпика
                     updateEpicDuration(epics.get(subTask.getEpicId()));
                 }
             }
@@ -216,26 +209,20 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteSubTask(int id) {
-        //проверяем, что такая сабтаска существует
         if (subTasks.get(id) != null) {
             int epicId = subTasks.get(id).getEpicId();
             prioritizedTasks.remove(subTasks.get(id));
-            //удаляем сабтаску
             subTasks.remove(id);
             epics.get(epicId).getSubTaskIds().remove((Integer) id);
             historyManager.remove(id);
-            //обновляем статус эпика
             updateEpicStatus(epics.get(epicId));
-            //обновляем время эпика
             updateEpicDuration(epics.get(epicId));
         }
     }
 
     @Override
     public void deleteEpic(int id) {
-        //проверяем, что такой эпик существует
         if (epics.containsKey(id)) {
-            //удаляем все сабтаски эпика, если имеются
             if (epics.get(id).getSubTaskIds().size() > 0)
                 for (Integer i : epics.get(id).getSubTaskIds()) {
                     subTasks.remove(i);

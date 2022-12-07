@@ -22,7 +22,6 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     void getEmptyHistoryTest() {
-        //Пустая история задач
         assertEquals(0,historyManager.getHistory().size(),"История не пустая");
     }
 
@@ -36,7 +35,6 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     void duplicateHistoryTest() {
-        //Дублирование
         Task task = new Task("Task #1","Task #1 description", NEW);
         historyManager.add(task);
         historyManager.add(task);
@@ -54,7 +52,6 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     void removeFromBeginningTest() {
-    //Удаление из истории: в начале
         Task task1 = new Task("Task #1","Task #1 description", NEW);
         Task task2 = new Task("Task #2","Task #2 description", NEW);
         Task task3 = new Task("Task #3","Task #3 description", NEW);
@@ -74,7 +71,6 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     void removeFromMiddleTest() {
-        //Удаление из истории: в середине
         Task task1 = new Task("Task #1","Task #1 description", NEW);
         Task task2 = new Task("Task #2","Task #2 description", NEW);
         Task task3 = new Task("Task #3","Task #3 description", NEW);
@@ -94,7 +90,6 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     void removeFromEndTest() {
-        //Удаление из истории: в конце
         Task task1 = new Task("Task #1","Task #1 description", NEW);
         Task task2 = new Task("Task #2","Task #2 description", NEW);
         Task task3 = new Task("Task #3","Task #3 description", NEW);

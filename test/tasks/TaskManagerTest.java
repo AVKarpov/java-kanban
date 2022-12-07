@@ -4,7 +4,6 @@ import manager.TaskManager;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,17 +11,6 @@ import static tasks.TaskStatus.*;
 
 public abstract class TaskManagerTest <T extends TaskManager> {
     protected T taskManager;
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-
-//    protected Task task;
-//    protected List<Task> tasks;
-//    protected Epic epic;
-//    protected List<Epic> epics;
-//    protected SubTask subTask;
-//    protected List<SubTask> subTasks;
-
-    protected void initTasks() {
-  }
 
     @Test
     void getAllTasksTest() {
@@ -165,8 +153,6 @@ public abstract class TaskManagerTest <T extends TaskManager> {
         final SubTask savedSubTask = taskManager.getSubTask(subTaskId);
         assertNotNull(savedSubTask, "Задача не найдена.");
         assertEquals(subTask, savedSubTask, "Задачи не совпадают.");
-
-        //проверить наличие эпика у подзадачи
         assertEquals(epicId, subTask.getEpicId(), "Идентификатор эпика в подзадаче не соответсвует идентификатору эпика");
 
         List<SubTask> savedSubTasks = taskManager.getEpicSubTasks(epicId);
@@ -297,10 +283,8 @@ public abstract class TaskManagerTest <T extends TaskManager> {
         final Epic epic = new Epic("Epic #1","Epic #1 description", NEW);
         int epicId = taskManager.addNewEpic(epic);
 
-        //пустой список подзадач
         assertEquals(NEW,taskManager.getEpic(epicId).getStatus(),"Статус отличается от NEW");
 
-        //Все подзадачи со статусом NEW
         SubTask subTask1 = new SubTask("Epic #1 subTask #1","Epic #1 subTask #1 description", NEW, epicId,
                 LocalDateTime.of(2022,12,5,22,30),30);
         SubTask subTask2 = new SubTask("Epic #1 subTask #2","Epic #1 subTask #2 description", NEW, epicId,
@@ -309,19 +293,16 @@ public abstract class TaskManagerTest <T extends TaskManager> {
         taskManager.addNewSubTask(subTask2);
         assertEquals(NEW,taskManager.getEpic(epicId).getStatus(),"Статус отличается от NEW");
 
-        //Подзадачи со статусом IN_PROGRESS
         subTask1.setStatus(IN_PROGRESS);
         taskManager.updateSubTask(subTask1);
         subTask2.setStatus(IN_PROGRESS);
         taskManager.updateSubTask(subTask2);
         assertEquals(IN_PROGRESS,taskManager.getEpic(epicId).getStatus(),"Статус отличается от IN_PROGRESS");
 
-        //Подзадачи со статусами NEW и DONE
         subTask2.setStatus(DONE);
         taskManager.updateSubTask(subTask2);
         assertEquals(IN_PROGRESS,taskManager.getEpic(epicId).getStatus(),"Статус отличается от IN_PROGRESS");
 
-        //Все подзадачи со статусом DONE
         subTask1.setStatus(DONE);
         taskManager.updateSubTask(subTask1);
         assertEquals(DONE,taskManager.getEpic(epicId).getStatus(),"Статус отличается от DONE");
@@ -415,6 +396,5 @@ public abstract class TaskManagerTest <T extends TaskManager> {
 
         assertEquals(expected, actual.toString(),"Время завершения обновленного эпика не совпадает");
     }
-
 
 }

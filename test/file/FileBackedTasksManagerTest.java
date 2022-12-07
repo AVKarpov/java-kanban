@@ -60,7 +60,6 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         assertEquals(expected, actual,"История не совпадает");
     }
 
-//    a. Пустой список задач.
     @Test
     public void emptyTaskListTest() {
         taskManager.getAllTasks();
@@ -70,7 +69,6 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         assertEquals(taskManager.getAllTasks().size(),tasks.size(),"Количество задач не совпадает");
     }
 
-//    b. Эпик без подзадач.
     @Test
     public void epicWithoutSubtasksTest() {
         final Epic epic = new Epic("Epic #1","Epic #1 description", NEW);
@@ -82,7 +80,6 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         assertEquals(0,epics.get(0).getSubTaskIds().size(),"У эпика из файла есть подзадачи");
     }
 
-//    c. Пустой список истории.
     @Test
     public void emptyHistoryTest() {
         Task task = new Task("Task #1","Task #1 description", NEW);
