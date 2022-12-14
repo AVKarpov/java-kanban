@@ -24,7 +24,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    private void save() {
+    protected void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
             writer.write("id,type,name,status,description,startTime,duration,endTime,epic\n");
 
@@ -95,7 +95,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return taskManager;
     }
 
-    private void updateEpicsSubTaskIds() {
+    protected void updateEpicsSubTaskIds() {
         for (SubTask subTask : super.subTasks.values()) {
             Epic epic = super.epics.get(subTask.getEpicId());
             if (epic != null)
@@ -107,7 +107,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         super.setGeneratorId(generatorId);
     }
 
-    private void restoreHistory(List<Integer> historyIds) {
+    protected void restoreHistory(List<Integer> historyIds) {
         for (Integer id : historyIds) {
             if (super.tasks.get(id) != null) {
                 super.historyManager.add(tasks.get(id));
@@ -119,7 +119,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    private void restoreTaskInMemory(Task task) {
+    protected void restoreTaskInMemory(Task task) {
         if (task.getTaskType() == TASK) {
             super.tasks.put(task.getId(),task);
         } else if (task.getTaskType() == SUBTASK) {

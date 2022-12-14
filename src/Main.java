@@ -1,18 +1,27 @@
-import manager.FileBackedTasksManager;
+import http.HttpTaskServer;
 import manager.Managers;
 import manager.TaskManager;
+import server.KVServer;
 import tasks.*;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.List;
-
-import static tasks.TaskStatus.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
+        new KVServer().start();
         TaskManager manager = Managers.getDefault();
+        new HttpTaskServer(manager).start();
+
+//        Task task1 = new Task("Task #1","Task #1 description", NEW,
+//                LocalDateTime.of(2022,12,5,22,30),30);
+//        manager.addNewTask(task1);
+//
+//        Task task2 = manager.getTask(1);
+//        System.out.println("Main.main");
+
 
         //Создайте 2 задачи
         /*Task task1 = new Task("Task #1","Task #1 description", NEW);
