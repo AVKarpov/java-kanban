@@ -14,14 +14,14 @@ public class HttpTaskManager extends FileBackedTasksManager {
     private final Gson gson;
     private final KVTaskClient client;
 
-    public HttpTaskManager(String url) {
-        this(url, false);
+    public HttpTaskManager(int port) {
+        this(port, false);
     }
 
-    public HttpTaskManager(String url, boolean hasLoad) {
+    public HttpTaskManager(int port, boolean hasLoad) {
         super(null);
         this.gson = Managers.getGson();
-        this.client = new KVTaskClient(url);
+        this.client = new KVTaskClient(port);
         if (hasLoad)
             loadFromServer();
     }

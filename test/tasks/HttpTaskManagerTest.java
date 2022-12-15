@@ -391,7 +391,7 @@ public class HttpTaskManagerTest  {
         httpTaskManager.getTask(1);
         httpTaskManager.getEpic(3);
 
-        HttpTaskManager taskManager = new HttpTaskManager("http://localhost:8078/",true);
+        HttpTaskManager taskManager = new HttpTaskManager(8078,true);
         assertEquals(httpTaskManager.getAllTasks(), taskManager.getAllTasks(),"Список task не совпадает");
         assertEquals(httpTaskManager.getAllEpics(), taskManager.getAllEpics(),"Список epic не совпадает");
         assertEquals(httpTaskManager.getHistory(), taskManager.getHistory(),"История не совпадает");

@@ -13,8 +13,8 @@ public class KVTaskClient {
     private final String apiToken;
 
 
-    public KVTaskClient(String url) {
-        this.url = url;
+    public KVTaskClient(int port) {
+        this.url = "http://localhost:" + port + "/";
         this.apiToken = register(url);
     }
 
