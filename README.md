@@ -10,8 +10,9 @@ Cервис совместного управления задачами.
  - в файле формата CSV;
  - на HTTP-сервере.
 
-<img src="C:\Users\michman\JavaProjects\Practicum\sprint3-hw\java-kanban\resources\schema.PNG">
-
+<p align="center">
+<img src="resources\schema.PNG">
+</p>
 Выполнение CRUD-операций над задачами
 
 Получение истории просмотра задач
